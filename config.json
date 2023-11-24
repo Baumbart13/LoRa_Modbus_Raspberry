@@ -1,0 +1,70 @@
+{
+	"log_file":"log.txt",
+	"network":{
+		"SSID":"YourWifiName",
+		"Pass":"your*nice#pass123"
+	},
+	"lora":{
+		"APP_EUI":"XXXXXXXXXXXXXXXX",
+		"APP_KEY":"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+		"DEV_EUI":"XXXXXXXXXXXXXXXX",
+		"retry_timeout":10,
+		"poll_time":1800,
+		"_comment":[
+			"retry_timeout = timeout while joining",
+			"poll_time = how much time in seconds between each message",
+			"Caluclated datarate with https://avbentem.github.io/airtime-calculator/ttn/eu868/80"
+		],
+		"data-rate":3
+	},
+	"modbus":{
+		"location":"xxx.xxx.xxx.xxx:502",
+		"poll_time":5.0,
+		"timeout":0.750,
+		"meters":{
+			"_comment":[
+				"The modbus-addresses of the DZG-meters are the last two digits of the serial number.",
+				"Those numbers are hexadecimals, not decimals.",
+				"Feel free to insert here the last two digits under double quotes and a leading '0x'"
+			],
+			"hw01":"0x97",
+			"hw02":"0x93",
+			"hw03":"0x17",
+			"hw04":"0x61",
+			"hw05":"0x62",
+			"hw06":"0x05",
+			"hw07":"0x75",
+			"hw08":"0x13",
+			"hw09":"0x01",
+			"hw10":"0x02"
+		}
+	},
+	"abbreviations":{
+		"hwa":"Hambergweg A",
+		"hwb":"Hambergweg B",
+		"hwc":"Hambergweg C",
+		"hwd":"Hambergweg D",
+		"hwe":"Hambergweg E",
+		"hwf":"Hambergweg F",
+		"hwg":"Hambergweg G",
+		"awi":"Apfelwiese",
+		"swi":"Spielwiese",
+		"rs":"Rosenstraße",
+		"as":"Ahornstraße",
+		"ss":"Sonnenstraße",
+		"zw":"Zillerweg",
+		"mw":"Mitterweg",
+		"dw":"Dammweg",
+		"hw":"Hambergweg",
+		"ew":"Edelweißweg",
+		"aw":"Alleeweg",
+		"sw":"Steinmauerweg",
+		"gw":"Gartenweg",
+		"tw":"Tennisweg",
+		"ma":"Markusplatz",
+		"lu":"Lukasplatz",
+		"st":"Stephanieplatz",
+		"fj":"Franz-Josef-Platz",
+		"lw":"Lindenweg"
+	}
+}
