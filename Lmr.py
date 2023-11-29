@@ -131,18 +131,20 @@ def main() -> None:
 				seconds = i * 60
 				logging.debug("Waiting for next poll... %s seconds remaining", seconds)
 				time.sleep(60)
-	except KeyboardInterrupt as interrupt:
+	except KeyboardInterrupt:
+		pass
+	finally:
 		exit(lora, meters)
-	exit(lora, meters)
 
 def main_once():
 	lora = Rak811()
 	meters:list[DZG.WH4013] = boot(lora, mb_conf, lora_conf)
 	try:
 		run(meters, lora, mb_conf["timeout"])
-	except KeyboardInterrupt as interrupt:
+	except KeyboardInterrupt:
+		pass
+	finally:
 		exit(lora, meters)
-	exit(lora, meters)
 
 if __name__ == "__main__":
 	logging.basicConfig(format="%(asctime)s %(levelname)s: %(message)s", datefmt='%m/%d/%YT%I:%M:%S', force=True)
