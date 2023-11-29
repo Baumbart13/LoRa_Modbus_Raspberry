@@ -43,7 +43,7 @@ def shutdown(lora:Rak811, meters:list[MB.Meter]) -> None:
 		meter.close()
 
 def test_run(runs:int, meters:list[DZG.WH4013], lora:Rak811) -> None:
-	for i in range(runs):
+	for _ in range(runs):
 		values:dict[str, float] = {}
 		for meter in meters:
 			logging.debug("Reading from %s, 0x%X", meter.name, meter.unit_id)
@@ -100,6 +100,7 @@ def run(meters:list[DZG.WH4013], lora:Rak811, mb_timeout:float) -> None:
 			lora.send(pack)
 		except Rak811Error as e:
 			if "Errno 80" in str(e):
+				logging.warning("Received Error 80 by LoRa-Module.. restarting the module")
 				lora.reboot()
 			#time.sleep(0.050)
 	else:
@@ -107,7 +108,11 @@ def run(meters:list[DZG.WH4013], lora:Rak811, mb_timeout:float) -> None:
 			pack = LoRa.pack_for_lora(values)
 			lora.send(pack)
 		except Rak811Error as e:
-			logging.error(e)
+			if "Errno 80" in str(e):
+				logging.warning("Received Error 80 by LoRa-Module.. restarting the module")
+				lora.reboot()
+			else:
+				logging.error(e)
 
 def exit(lora:Rak811, meters:list[MB.Meter]) -> None:
 	logging.info("Closing connection to LoRa-module")
