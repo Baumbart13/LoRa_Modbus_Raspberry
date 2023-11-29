@@ -21,6 +21,8 @@
 		"location":"xxx.xxx.xxx.xxx:502",
 		"poll_time":5.0,
 		"timeout":0.750,
+		"retries":5,
+		"retry_timeout":1.0,
 		"meters":{
 			"_comment":[
 				"The modbus-addresses of the DZG-meters are the last two digits of the serial number.",
