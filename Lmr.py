@@ -74,18 +74,28 @@ def test_run(runs:int, meters:list[DZG.WH4013], lora:Rak811) -> None:
 		time.sleep(5)
 	logging.info("End of test")
 
-def run(meters:list[DZG.WH4013], lora:Rak811, mb_timeout:float) -> None:
+def run(meters:list[DZG.WH4013], lora:Rak811, mb_conf:dict) -> None:
 	values:dict[str, float] = {}
 	for meter in meters:
 		logging.debug("Reading from %s, 0x%X", meter.name, meter.unit_id)
-		value = meter.read_current_power()
-		if value is not None:
-			values[meter.name] = value
+
+		# On some older firmware or other meters, it can happen, that the modbus-interface
+		# needs to be activated first.. thus we need to make a call more than once, to
+		# re-activate the interface of the meter
+		for i in range(mb_conf["retries"]):
+			value = meter.read_current_power()
+
+			if value is not None:
+				values[meter.name] = value
+				break
+			else:
+				logging.warning("Could not read from %s, 0x%X. Retrying %d/%d..", meter.name, meter.unit_id, i, mb_conf["retries"])
+				time.sleep(mb_conf["retry_timeout"])
 
 		# There needs to be a timeout between each call for a new
 		# modbus-device. Minimum looks like 500ms, but 750ms is much
 		# safer to use. Original SPS-Version has a timeout of 1000ms.
-		time.sleep(mb_timeout)
+		time.sleep(mb_conf["timeout"])
 	for key, value in values.items():
 		logging.debug('"%s": "%s"', key, value)
 	
@@ -145,7 +155,7 @@ def main_once():
 	lora = Rak811()
 	meters:list[DZG.WH4013] = boot(lora, mb_conf, lora_conf)
 	try:
-		run(meters, lora, mb_conf["timeout"])
+		run(meters, lora, mb_conf)
 	except KeyboardInterrupt:
 		pass
 	finally:
